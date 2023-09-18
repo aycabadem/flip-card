@@ -13,6 +13,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Dispatch, SetStateAction } from "react";
+import { auth } from "../firebaseSetup";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -21,13 +24,25 @@ interface SignInProps {
 }
 
 export default function SignIn({ setShowSignIn }: SignInProps) {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+    try {
+      const response = await auth.signInWithEmailAndPassword(
+        data.get("email")!.toString(),
+        data.get("password")!.toString()
+      );
+      console.log(response);
+      dispatch(login());
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

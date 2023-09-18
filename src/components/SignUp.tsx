@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Dispatch, SetStateAction } from "react";
+import { auth } from "../firebaseSetup";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -20,13 +21,27 @@ interface SignUpProps {
   setShowSignIn: Dispatch<SetStateAction<boolean>>;
 }
 export default function SignUp({ setShowSignIn }: SignUpProps) {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+    try {
+      const response = await auth.createUserWithEmailAndPassword(
+        data.get("email")!.toString(),
+        data.get("password")!.toString()
+      );
+      response.user?.updateProfile({
+        displayName: `${data.get("firstName")} ${data.get("lastName")}`,
+      });
+      console.log(response);
+      setShowSignIn(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
