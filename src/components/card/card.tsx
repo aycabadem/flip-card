@@ -1,11 +1,11 @@
 import "./card.css";
 import "./flip-transition.css";
 
-function Card({ onClick }: any) {
+function Card({ onClick, english, portuguese }: any) {
   return (
     <div className="card" onClick={onClick}>
-      <div className="card-back">Back</div>
-      <div className="card-front">Front</div>
+      <div className="card-back">{english}</div>
+      <div className="card-front">{portuguese}</div>
     </div>
   );
 }
