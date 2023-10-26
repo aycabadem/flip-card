@@ -1,9 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./authSlice";
 import { appBarSlice } from "./appBarSlice";
+import { wordsSlice } from "./wordsSlice";
 
 
-const reducers = combineReducers({authReducer : authSlice.reducer, appReducer: appBarSlice.reducer });
+const reducers = combineReducers({authReducer : authSlice.reducer, appReducer: appBarSlice.reducer , wordReducer: wordsSlice.reducer});
 
 
 export const store = configureStore({
