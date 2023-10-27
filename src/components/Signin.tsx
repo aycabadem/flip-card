@@ -39,7 +39,7 @@ export default function SignIn({ setShowSignIn }: SignInProps) {
         data.get("password")!.toString()
       );
       console.log(response);
-      dispatch(login());
+      dispatch(login(response.user));
     } catch (error) {
       console.error(error);
     }

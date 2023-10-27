@@ -6,8 +6,8 @@ import { firestore } from "../firebaseSetup";
 import { deleteWord } from "../redux/wordsSlice";
 
 const WordListItem = (props: { index: number; word: Word }) => {
-  const inputRefPt = useRef<HTMLInputElement>(null);
-  const inputRefEn = useRef<HTMLInputElement>(null);
+  const inputRefPt = useRef<HTMLInputElement | null>(null);
+  const inputRefEn = useRef<HTMLInputElement | null>(null);
 
   //   inputRefEn.current!.value = props.word.english;
   //   inputRefPt.current!.value = props.word.english;
@@ -16,7 +16,7 @@ const WordListItem = (props: { index: number; word: Word }) => {
   const dispatch = useDispatch();
 
   const deleteData = async (word: Word) => {
-    const snapshot = await firestore.collection("words").doc(word.id).delete();
+    await firestore.collection("words").doc(word.id).delete();
   };
   return (
     <div
@@ -52,15 +52,47 @@ const WordListItem = (props: { index: number; word: Word }) => {
           }}
         />
       </div>
-      <div>
+      <div style={{ justifyContent: "left" }}>
         <button
+          style={{ visibility: edit ? "hidden" : "visible" }}
           onClick={() => {
             setEdit((edit) => !edit);
           }}
         >
           edit
+        </button>{" "}
+        <button
+          style={{
+            visibility: !edit ? "hidden" : "visible",
+          }}
+          onClick={() => {
+            setEdit((edit) => !edit);
+            inputRefEn.current!.value = props.word.english;
+            inputRefPt.current!.value = props.word.portuguese;
+          }}
+        >
+          cancel
+        </button>
+        <button
+          style={{ visibility: !edit ? "hidden" : "visible" }}
+          onClick={async () => {
+            setEdit((edit) => !edit);
+            console.log(inputRefEn.current!.value);
+
+            await firestore
+              .collection("words")
+              .doc(props.word.id)
+              .update({
+                ...props.word,
+                english: inputRefEn.current!.value,
+                portuguese: inputRefPt.current!.value,
+              });
+          }}
+        >
+          save
         </button>
       </div>
+
       <div>
         <button
           onClick={() => {

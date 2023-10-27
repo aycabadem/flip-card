@@ -1,18 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "../firebaseSetup";
 
- export const authSlice = createSlice({
-    name: "authSlice",
-    initialState: {
-      isloggedIn: false,
+interface IAuthSlice {
+  user?: User;
+  isloggedIn: boolean;
+}
+const initialState: IAuthSlice = {
+  isloggedIn: false,
+};
+export const authSlice = createSlice({
+  name: "authSlice",
+  initialState,
+  reducers: {
+    login: (state, action) => {
+      state.isloggedIn = true;
+      state.user = action.payload;
     },
-    reducers: {
-      login: (state) => {
-        state.isloggedIn = true;
-      },
-      logout: (state) => {
-        state.isloggedIn = false;
-      },
+    logout: (state) => {
+      state.isloggedIn = false;
     },
-  });
-  
-  export const { login, logout } = authSlice.actions;
+  },
+});
+
+export const { login, logout } = authSlice.actions;
