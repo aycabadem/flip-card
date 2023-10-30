@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
@@ -20,7 +20,7 @@ const defaultTheme = createTheme();
 interface SignUpProps {
   setShowSignIn: Dispatch<SetStateAction<boolean>>;
 }
-export default function SignUp({ setShowSignIn }: SignUpProps) {
+export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,7 +38,6 @@ export default function SignUp({ setShowSignIn }: SignUpProps) {
         displayName: `${data.get("firstName")} ${data.get("lastName")}`,
       });
       console.log(response);
-      setShowSignIn(true);
     } catch (error) {
       console.error(error);
     }
@@ -130,15 +129,7 @@ export default function SignUp({ setShowSignIn }: SignUpProps) {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link
-                  href="#"
-                  variant="body2"
-                  onClick={() => {
-                    setShowSignIn(true);
-                  }}
-                >
-                  Already have an account? Sign in
-                </Link>
+                <Link to="/signin">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </Box>

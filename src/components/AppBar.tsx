@@ -17,11 +17,13 @@ import { auth } from "../firebaseSetup";
 import { logout } from "../redux/authSlice";
 import { updateIndex } from "../redux/appBarSlice";
 import { RootState } from "../redux/store";
+import { Link, useNavigate } from "react-router-dom";
 
 const pages = ["Practice", "Words"];
 const settings = ["Logout"];
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate();
   const index = useSelector((state: RootState) => state.appReducer.index);
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -49,8 +51,10 @@ function ResponsiveAppBar() {
   };
   const logoutHandler = async () => {
     dispatch(logout());
+
     await auth.signOut();
     dispatch(updateIndex(0));
+    navigate("/signin");
   };
   return (
     <AppBar position="static">
@@ -86,30 +90,6 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
@@ -138,19 +118,20 @@ function ResponsiveAppBar() {
             }}
           >
             {pages.map((page, i) => (
-              <Button
-                key={page}
-                onClick={() => dispatchUpdateIndex(i)}
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
+              <Link to={page.toLowerCase()}>
+                <Button
+                  key={page}
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
 
-                  fontWeight: i === index ? "bold" : "normal",
-                }}
-              >
-                {page}
-              </Button>
+                    fontWeight: i === index ? "bold" : "normal",
+                  }}
+                >
+                  {page}
+                </Button>
+              </Link>
             ))}
           </Box>
           <Typography paddingRight={2} textAlign="center">

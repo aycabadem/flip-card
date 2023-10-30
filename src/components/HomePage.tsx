@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import ResponsiveAppBar from "./AppBar";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import Practice from "./Practice";
-import Words from "./Words";
+
+import { Outlet, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const index = useSelector((state: RootState) => state.appReducer.index);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("practice");
+  }, []);
+
   return (
     <>
       <ResponsiveAppBar />
-      {index === 0 ? <Practice /> : <Words />}
+      {/* <Routes>
+        <Route path="/" element={<Practice />}></Route>
+        <Route path="/words" element={<Words />}></Route>
+      </Routes> */}
+
+      <Outlet />
     </>
   );
 };

@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 //import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -16,6 +16,7 @@ import { Dispatch, SetStateAction } from "react";
 import { auth } from "../firebaseSetup";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -23,8 +24,9 @@ interface SignInProps {
   setShowSignIn: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function SignIn({ setShowSignIn }: SignInProps) {
+export default function SignIn() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,6 +42,7 @@ export default function SignIn({ setShowSignIn }: SignInProps) {
       );
       console.log(response);
       dispatch(login(response.user));
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -103,20 +106,10 @@ export default function SignIn({ setShowSignIn }: SignInProps) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <Link to="#">Forgot password?</Link>
               </Grid>
               <Grid item>
-                <Link
-                  href="#"
-                  variant="body2"
-                  onClick={() => {
-                    setShowSignIn(false);
-                  }}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
           </Box>
